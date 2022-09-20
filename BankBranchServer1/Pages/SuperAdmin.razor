@@ -1,0 +1,298 @@
+﻿
+@page "/superadmin"
+
+@inject Database database
+
+<PageTitle>Admin Dashboard</PageTitle>
+
+<div class="container-fluid">
+    <h1>Admin Dashboard</h1>
+    <br />
+    <div class="row justify-content-center" style="background-color: #212529;">
+        <button class="button_custom item_center" @onclick="@(e=>setNave(0))" style="@ccss[0]">Login Activities</button>
+        <button class="button_custom item_center" @onclick="@(e=>setNave(2))" style="@ccss[2]">Reset Accounts</button>
+    </div>
+
+    @if (nav == 0)
+    {
+        <div class="container-fluid">
+            <br /> 
+            <div class="container-fluid item_center">
+                <h2>Login Activity Details</h2>
+            </div>
+            <br />
+
+            <div class="row mt-2">
+                @if(navsearch == 1)
+                {
+                    <div class="container-fluid item_right">
+                        <div class="container item_right">
+                            <table>
+                                <tr>
+                                    <td>Search by Staff ID :</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="w3-input search_input my-1 px-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button class="search_button">Search</button>
+                                        <button class="search_button">Clear</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                }
+                <div class=container-fluid>
+                    <div class="search_nav_container">
+                        <button class="search_nav_button" @onclick="@(e=>setNavSearch(0))" style="@cssSearch[0]">All</button><button class="search_nav_button" @onclick="@(e=>setNavSearch(1))" style="@cssSearch[1]">Search by ID</button>
+                    </div>
+                    <div class="item_right">
+                        <button class="none_button" data-bs-toggle="tooltip" data-bs-placement="left" title="Reload Data"><span class="oi oi-reload"></span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="container-fluid my-2 w-100 overflow-auto" style="height: 400px;">
+                    <table class="table">
+                        <thead>
+                            <tr class="table_style">
+                                <th>Employee ID</th>
+                                <th>Login Time</th>
+                                <th>Logout Time</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (ActivityLog act in activities)
+                            {
+                                <tr>
+                                    <td>@act.id</td>
+                                    <td>@act.login</td>
+                                    <td>@act.logout</td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    }
+
+    @if(nav==2)
+    {
+        
+    <div class="container-fluid">
+        <br /> 
+        <div class="container-fluid item_center">
+            <h2>Account Resets</h2>
+        </div>
+        <br />
+        @*<div class="row justify-content-center" style="background-color: #212529;">
+            <button class="button_custom item_center" @onclick="@(e=>setNaveReset(0))" style="@cssReset[0]">Account Status</button>
+            <button class="button_custom item_center" @onclick="@(e=>setCssRest(1))" style="@cssReset[1]">Reset Password</button>
+        </div>*@
+
+        <div class="container-fluid">
+            <br /> 
+            <div class="container-fluid item_center">
+                <h2>Change Account Status</h2>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="container-fluid">
+                    <table class="table">
+                        <thead>
+                            <tr class="table_style">
+                                <th>ID</th>
+                                <th>NIC</th>
+                                <th>Posision</th>
+                                <th>Status</th>
+                                <th>Change</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <button class="btn btn-dark">Change</button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container-fluid">
+            <br /> 
+            <div class="container-fluid item_center">
+                <h2>Reset Password Requests</h2>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="container-fluid">
+                    <table class="table">
+                        <thead>
+                            <tr class="table_style">
+                                <th>ID</th>
+                                <th>NIC</th>
+                                <th>Posision</th>
+                                <th>Status</th>
+                                <th>Reset</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <button class="btn btn-dark">Reset</button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+</div>
+
+@code {
+    private List<ActivityLog> activities = new();
+    private string[]? ccss = new string[3];
+    private string[]? cssSearch = new string[2];
+    private string[]? cssReset = new string[2];
+    private int nav = 0;
+    private int navsearch = 0;
+    private int navreset = 0;
+
+    protected override void OnInitialized()
+    {
+        setNave(0);
+        setNavSearch(0);
+        setNaveReset(0);
+        dataLoading();
+    }
+
+    private void dataLoading()
+    {
+        activities = database.GetActivityLog(0, 0);
+    }
+
+    private void loadActivitylog(int t)
+    {
+        if(t==0)
+        {
+            try
+            {
+                if (activities.Count > 0)
+                { activities.RemoveRange(0, (activities.Count - 1)); }
+                activities = database.GetActivityLog(0, 0);
+            }
+            catch (Exception e)
+            { Console.WriteLine(e.Message); }
+        }
+        else
+        {
+            try
+            {
+                if (activities.Count > 0)
+                { activities.RemoveRange(0, (activities.Count - 1)); }
+                activities = database.GetActivityLog(1, t);
+            }
+            catch (Exception e)
+            { Console.WriteLine(e.Message); }
+        }
+        StateHasChanged();
+    }
+
+    private void setNaveReset(int t)
+    {
+        navreset = t;
+        setCssRest(t);
+    }
+
+    private void setCssRest(int t)
+    {
+        clearCssReset();
+        cssReset[t] = "background-color: white; color: #212529;";
+    }
+
+    private void clearCssReset()
+    {
+        cssReset[0] = null;
+        cssReset[1] = null;
+    }
+
+    private void clearSearchCss()
+    {
+        for(int i=0;i<cssSearch.Length;++i)
+        {
+            cssSearch[i] = null;
+        }
+    }
+
+    private void setNavSearch(int t)
+    {
+        navsearch = t;
+        setSearchCss(t);
+        if(t==1)
+        {
+            loadActivitylog(234);
+        }
+        else if(t==0)
+        {
+            loadActivitylog(0);
+        }
+    }
+
+    private void setSearchCss(int t)
+    {
+        clearSearchCss();
+        cssSearch[t] = "background-color: #212529; color: white;";
+    }
+
+    private void setNave(int t)
+    {
+        nav = t;
+        setCss(t);
+    }
+
+    private void clearCss()
+    {
+        for(int i=0;i<ccss.Length;++i)
+        {
+            ccss[i] = null;
+        }
+    }
+
+    private void setCss(int t)
+    {
+        clearCss();
+        ccss[t] = "background-color: white; color: #212529;";
+    }
+}

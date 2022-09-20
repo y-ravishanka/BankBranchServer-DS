@@ -1,0 +1,125 @@
+﻿@page "/"
+
+@inject Database database
+@inject Calculations cal
+
+<PageTitle>Index</PageTitle>
+<div class="ps-2">
+    <h1>Branch</h1>
+    <h4>@date</h4>
+    <h5>@time</h5>
+</div>
+<br />
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <div>Today Data Statistics</div>
+        </div>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="custom_table">
+                                <tr>
+                                    <td>New Accounts</td>
+                                    <td>: @status.newaccounts</td>
+                                </tr>
+                                <tr>
+                                    <td>Transactions</td>
+                                    <td>: @(status.deposits + status.withdraws)</td>
+                                </tr>
+                                <tr>
+                                    <td>Deposits</td>
+                                    <td>: @status.deposits</td>
+                                </tr>
+                                <tr>
+                                    <td>Withdraws</td>
+                                    <td>: @status.withdraws</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="custom_table">
+                                <tr>
+                                    <td>Deposit Balance</td>
+                                    <td>Rs : @status.newaccounts</td>
+                                </tr>
+                                <tr>
+                                    <td>WithDraw Balance</td>
+                                    <td>Rs : @(status.deposits + status.withdraws)</td>
+                                </tr>
+                                <tr>
+                                    <td>Balance</td>
+                                    <td>Rs : @status.deposits</td>
+                                </tr>
+                                @*<tr>
+                                    <td>Withdraws</td>
+                                    <td>: @status.withdraws</td>
+                                </tr>*@
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br /><br /><br />
+
+
+@code{
+    private List<ActivityLog> list = new();
+    private FullStatus status = new();
+    private static System.Timers.Timer aTimer;
+    private int counter = 60;
+    private int t;
+    private string? date;
+    private string? time;
+
+    protected override void OnInitialized()
+    {
+        time = DateTime.Now.ToString("HH:mm:ss");
+        list = database.GetActivityLog(0,0);
+        SetDate();
+        status.newaccounts = 3;
+        status.deposits = 7;
+        status.withdraws = 10;
+        StartTimer();
+    }
+
+    private void set()
+    {
+        t = database.getLogCount();
+    }
+
+    private void SetDate()
+    { 
+        date = cal.GetDate(); 
+    }
+
+    private void StartTimer()
+    {
+        aTimer = new System.Timers.Timer(1000);
+        aTimer.Elapsed += CountDownTimer;
+        aTimer.Enabled = true;
+    }
+
+    private void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        if (counter > 0)
+        {
+            counter -= 1;
+            time = DateTime.Now.ToString("HH:mm:ss");
+        }
+        else
+        {
+            counter = 60;
+        }
+        InvokeAsync(StateHasChanged);
+    }
+}

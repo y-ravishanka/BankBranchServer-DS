@@ -1,0 +1,249 @@
+﻿@page "/showdatabase"
+
+@inject Database database
+@inject NavigationManager navigate
+
+<div class="container-fluid">
+    <h1>Database</h1>
+    <br />
+    <div class="row justify-content-center" style="background-color: #212529;">
+        <button class="button_custom item_center" @onclick="@(e=>setNave(0))" style="@ccss[0]">Statistic Informations</button>
+        <button class="button_custom item_center" @onclick="@(e=>setNave(2))" style="@ccss[2]">Account Informations</button>
+        <button class="button_custom item_center" @onclick="@(e=>setNave(1))" style="@ccss[1]">Transaction Informations</button>
+    </div>
+
+    @* Statistic Data Section *@
+    @if(nav == 0)
+    {
+        <div class="container-fluid">
+            <br /> 
+            <div class="container-fluid item_center">
+                <h2>Statistic Informations</h2>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="card my-2">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="container-fluid item_right">
+                                <button class="none_button">
+                                    <span class="oi oi-x"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <h5 class="my-2 ms-3">date - statistics</h5>
+                            <div class="col-md-6">
+                                <table class="alone_data_table ms-4">
+                                    <tr>
+                                        <td>Deposits </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Withdraws </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>New Accounts </td>
+                                        <td>: </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="alone_data_table ms-3">
+                                    <tr>
+                                        <td>Deposit Amount </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Withdraw Amount </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Balance </td>
+                                        <td>: </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <h4>All Statistics Data</h4>
+                <div class="container-fluid  overflow-auto" style="height: 500px;">
+                    <table class="table">
+
+                        <thead>
+                            <tr class="table_style">
+                                <th>Date</th>
+                                <th>Deposits</th>
+                                <th>Withdraws</th>
+                                <th>Balance</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button class="btn btn-dark px-3">view</button></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    }
+
+    @* Transaction Data Section *@
+    @if (nav == 1)
+    {
+        <div class="container-fluid">
+            <br /> 
+            <div class="container-fluid item_center">
+                <h2>Transaction Informations</h2>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="card my-2">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="container-fluid item_right">
+                                <button class="none_button">
+                                    <span class="oi oi-x"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <h5 class="ms-3 my-2">Transaction id - account number</h5>
+
+                            <div class="col-md-8">
+                                <table class="alone_data_table ms-4">
+
+                                    <tr>
+                                        <td>ID </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Type </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Account </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Amount </td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Deposite by </td>
+                                        <td>: </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="row item_center my-2">
+                                    <button class="option_buttons" @onclick="viewAccount">View Account<br />Details</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <h4>All Transaction Data</h4>
+                <div class="container-fluid  overflow-auto" style="height: 500px;">
+                    <table class="table">
+
+                        <thead>
+                            <tr class="table_style">
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button class="btn btn-dark px-3">view</button></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    }
+
+
+
+</div>
+
+@code {
+    private List<Transaction> transaction = new();
+    private List<FullStatus> fullStatus = new();
+    private int nav = 0;
+    private string[]? ccss = new string[3];
+
+    protected override void OnInitialized()
+    {
+        setNave(0);
+    }
+
+    private void viewAccount()
+    {
+        navigate.NavigateTo("/counter");
+    }
+
+    private void setNave(int t)
+    {
+        nav = t;
+        setCss(t);
+    }
+
+    private void clearCss()
+    {
+        for(int i=0;i<ccss.Length;++i)
+        {
+            ccss[i] = null;
+        }
+    }
+
+    private void setCss(int t)
+    {
+        clearCss();
+        ccss[t] = "background-color: white; color: #212529;";
+    }
+
+}

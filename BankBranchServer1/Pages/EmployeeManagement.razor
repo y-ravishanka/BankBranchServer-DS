@@ -1,0 +1,426 @@
+﻿
+@page "/employee"
+
+@inject Database database
+
+<PageTitle>Employees</PageTitle>
+
+<div class="container-fluid">
+    <h1>Employee Management</h1>
+    <br />
+    <div class="row justify-content-center" style="background-color: #212529;">
+        <button class="button_custom item_center" @onclick="@(e=>setNave(0))" style="@ccss[0]">Employees Information</button>
+        <button class="button_custom item_center" @onclick="@(e=>setNave(1))" style="@ccss[1]">Update Employee</button>
+    </div>
+
+    @* employee information section *@
+    @if (nav == 0)
+    {
+        <div class="container-fluid">
+            <br /> 
+            <div class="container-fluid item_center">
+                <h2>Employee Informations</h2>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="container-fluid item_right">
+
+                    <div class="container item_right">
+                        <table>
+                            <tr>
+                                <td>Search by NIC :</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" class="w3-input search_input my-1 px-1">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="search_button">Search</button>
+                                    <button class="search_button">Clear</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="card my-2">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="container-fluid item_right">
+                                <button class="none_button">
+                                    <span class="oi oi-x"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="container-fluid">
+
+                                <h3>Yasas Ravishanka</h3>
+                                <h5>9854623v</h5>
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+
+                                        <div class="card mt-2">
+                                            <div class="card-header">
+                                                Basic Informations
+                                            </div>
+                                            <div class="card-body">
+                                                <table>
+                                                    <tr>
+                                                        <td>ID </td>
+                                                        <td>: @employee.id</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>NIC </td>
+                                                        <td>: @employee.nic</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>First Name </td>
+                                                        <td>: @employee.fname</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Last Name </td>
+                                                        <td>: @employee.lname</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Date of Birth </td>
+                                                        <td>: @employee.dob</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="card mt-2">
+                                            <div class="card-header">
+                                                Location Informations
+                                            </div>
+                                            <div class="card-body">
+                                                <table>
+                                                    <tr>
+                                                        <td>Address </td>
+                                                        <td>: @employee.saddress</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>City </td>
+                                                        <td>: @employee.city</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Distric </td>
+                                                        <td>: @employee.distric</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Province </td>
+                                                        <td>: @employee.province</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Zip Code </td>
+                                                        <td>: @employee.zip</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <div class="card mt-2">
+                                            <div class="card-header">
+                                                Contact Informations
+                                            </div>
+                                            <div class="card-body">
+                                                <table>
+                                                    <tr>
+                                                        <td>Phone number 1 </td>
+                                                        <td>: @employee.phone1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Phone Number 2 </td>
+                                                        <td>: @employee.phone2</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Email </td>
+                                                        <td>: @employee.email</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="card mt-2">
+                                            <div class="card-header">
+                                                Status Informations
+                                            </div>
+                                            <div class="card-body">
+                                                <table>
+                                                    <tr>
+                                                        <td>Employee Status </td>
+                                                        <td>: </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Posision </td>
+                                                        <td>: </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Branch ID </td>
+                                                        <td>: @employee.branch</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <h4>All Employees</h4>
+                <div class="container-fluid overflow-auto" style="height: 500px;">
+                    <table class="table">
+                        <thead>
+                            <tr class="table_style">
+                                <th>ID</th>
+                                <th>NIC</th>
+                                <th>Name</th>
+                                <th>Branch</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Employee emp in emps)
+                            {
+                                <tr>
+                                    <td>@emp.id</td>
+                                    <td>@emp.nic</td>
+                                    <td>@(emp.fname+" "+emp.lname)</td>
+                                    <td>@emp.branch</td>
+                                    <td>
+                                        <button class="btn btn-dark">View</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
+
+
+@if(nav==1)
+{
+    <div class="row">
+        <br /> 
+            <div class="container-fluid item_center">
+                <h2>Update Employee</h2>
+            </div>
+            <br />
+                <div class="container-fluid item_right">
+
+                    <div class="container item_right">
+                        <table>
+                            <tr>
+                                <td>Search by NIC :</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" class="w3-input search_input my-1 px-1">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="search_button">Search</button>
+                                    <button class="search_button">Clear</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="card my-2">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="container-fluid">
+                                <div class="row">
+
+                                    <div class="col-md-6">
+
+                                        <div class="card mt-2">
+                                            <div class="card-header">
+                                                Basic Informations
+                                            </div>
+                                            <div class="card-body">
+                                                <table>
+                                                    <tr>
+                                                        <td>NIC </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>First Name </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Last Name </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Date of Birth </td>
+                                                        <td>: @employee.dob</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="card mt-2">
+                                            <div class="card-header">
+                                                Location Informations
+                                            </div>
+                                            <div class="card-body">
+                                                <table>
+                                                    <tr>
+                                                        <td>Address </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>City </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Distric </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Province </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Zip Code </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <div class="card mt-2">
+                                            <div class="card-header">
+                                                Contact Informations
+                                            </div>
+                                            <div class="card-body">
+                                                <table>
+                                                    <tr>
+                                                        <td>Phone number 1 </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Phone Number 2 </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Email </td>
+                                                        <td>
+                                                            <input class="w3-input ms-3 my-1 px-1" style="width:300px;">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="container-fluid item_right">
+                                <div>
+                                    <button class="search_button">Update</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+}
+
+@code {
+    List<Employee> emps = new();
+    Employee employee = new();
+    private string[]? ccss = new string[3];
+    private int nav = 0;
+
+    protected override void OnInitialized()
+    {
+        setNave(0);
+    }
+
+    private void setNave(int t)
+    {
+        nav = t;
+        setCss(t);
+    }
+
+    private void clearCss()
+    {
+        for(int i=0;i<ccss.Length;++i)
+        {
+            ccss[i] = null;
+        }
+    }
+
+    private void setCss(int t)
+    {
+        clearCss();
+        ccss[t] = "background-color: white; color: #212529;";
+    }
+}

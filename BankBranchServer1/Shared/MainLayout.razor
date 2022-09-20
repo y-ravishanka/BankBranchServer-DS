@@ -1,0 +1,295 @@
+﻿@inherits LayoutComponentBase
+@inject Database database
+@inject Calculations cal
+@inject EncryptClass encrypt
+
+<PageTitle>BankBranchServer1</PageTitle>
+
+@if (set == false)
+{
+    if(ln==0)
+    {
+        <div class="content vw-100">
+            <div class="container-fluid my-5 page-custom containt-center" style="height:80vh;">
+                <div class="w3-content login-window">
+                    <div class="card containt-center py-3">
+                        <img class="login-pic" src="/img/user1.png">
+                        <h2>LogIn</h2>
+                        <div class="container-fluid px-5 py-2">
+                            <div class="input-group">
+                                <input type="text" name="loginuser" @bind="username"  required>
+                                <label for="loginuser">User NIC</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" name="loginpassword" required @bind="password">
+                                <label for="loginpassword">Password</label>
+                            </div>
+                            <div class="containt-center">
+                                <button class="btn my-button-dark" @onclick="@setTrue">Login</button><br />
+                            </div>
+                            <div class="my-3">
+                                <button class="my-button"  @onclick="@(e=>changeLogin(1))">Forget Password?</button><br />
+                                <button class="my-button" @onclick="@(e=>changeLogin(2))">Change your Password</button>
+                            </div>
+                            @if(vf == true)
+                            {
+                                <label class="warnning_msg px-1 ps-1">@warningl</label><br>
+                                <label class="warnning_msg px-1 ps-1">@warningp</label>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    
+
+    if(ln==1)
+    {
+        <div class="content vw-100">
+            <div class="container-fluid my-5 page-custom containt-center" style="height:80vh;">
+                <div class="w3-content login-window">
+                    <div class="card containt-center py-3">
+                        <h2>Request Reset Password</h2>
+                        <div class="container-fluid px-5 py-2">
+                            <div class="input-group">
+                                <input type="text" name="loginuser"  required>
+                                <label for="loginuser">User NIC</label>
+                            </div>
+                            <div class="containt-center">
+                                <button class="btn my-button-dark me-3" @onclick="@(e=>changeLogin(0))">To Login</button><br />
+                                <button class="btn my-button-dark" @onclick="@(e=>changeLogin(0))">Request</button><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    if(ln==2)
+    {
+        <div class="content vw-100">
+            <div class="container-fluid my-5 page-custom containt-center" style="height:80vh;">
+                <div class="w3-content login-window">
+                    <div class="card containt-center py-3">
+                        <h2>Change Password</h2>
+                        <div class="container-fluid px-5 py-2">
+                            <div class="input-group">
+                                <input type="password" name="loginpassword" required @bind="password">
+                                <label for="loginpassword">Old Password</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" name="loginpassword" required @bind="password">
+                                <label for="loginpassword">New Password</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" name="loginpassword" required @bind="password">
+                                <label for="loginpassword">Confirm Password</label>
+                            </div>
+                            <div class="containt-center">
+                                <button class="btn my-button-dark me-3" @onclick="@(e=>changeLogin(0))">To Login</button><br />
+                                <button class="btn my-button-dark" @onclick="@(e=>changeLogin(0))">Change</button><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <main>
+            <div class="top-row px-4">
+                <div class="container-fluid">
+                    <div class="row" style="width:100%;">
+                        <div class="col-md-11 py-1">
+                            <div class="row" style="width:100%;">
+                                <div class="col-md-6">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <img class="login-pic" src="/img/user1.png">
+                                            </td>
+                                            <td class="ps-4">
+                                                <div class="top_username">name</div>
+                                                <div class="top_nic">@login.nic</div>
+                                                <div class="top_posi">@login.posision</div>
+                                            </td>
+                                            </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="mt-3">
+                                        <tr>
+                                            <td>Server status </td>
+                                            <td class="ps-2" style="@serverCSS"><b>:&nbsp; running</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Database </td>
+                                            <td class="ps-2" style="@databaseCSS"><b>:&nbsp; @dbstatus</b></td>
+                                        </tr>
+                                        <tr>
+                                            @*<td>test timer </td>
+                                            <td class="ps-2">:&nbsp; @counter</td>*@
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-dark mt-3 mb-1 px-3" @onclick="@setFalse">LogOut</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </div>
+}
+
+@code{
+    ClientLogin login = new();
+    private bool set = false;
+    private static System.Timers.Timer aTimer;
+    private int counter = 5;
+    private bool db = false;
+    private bool vf = false;
+    private string dbstatus;
+    private string serverCSS = "font-style: oblique; font-size: 15px; color: #20A755;";
+    private string databaseCSS;
+    private string? username { get; set; }
+    private string? password { get; set; }
+    private string? warningl = null;
+    private string? warningp = null;
+    private int ln = 0;
+
+    protected override void OnInitialized()
+    {
+        setDatabase();
+        clearCredintal();
+        clearWarning();
+    }
+
+    private void changeLogin(int t)
+    {
+        ln = t;
+    }
+
+    private void clearCredintal()
+    {
+        username = null;
+        password = null;
+    }
+
+    private void clearWarning()
+    {
+        warningl = null;
+        warningp = null;
+        vf = false;
+    }
+
+    private void ValidatePassword()
+    {
+        bool checklogin = false;
+        clearWarning();
+        if(username == null || username == "")
+        {
+            warningl = "* User Email is Required";
+            vf = true;
+        }
+        else
+        {
+            if(database.CheckUser(username) == true)
+            {
+                if(checklogin == true)
+                {
+                    login = database.GetLoginDetails(username);
+                    if(password == encrypt.Decrypt(login.password,""))
+                    {
+                        setTrue();
+                    }
+                    else
+                    {
+                        warningl = "* Wrong Email or Password";
+                        warningp = "* Please Check your Credentials";
+                        vf = true;
+                    }
+                }
+            }
+            else
+            {
+                warningl = "* Please Enter a Valid Email";
+                vf = true;
+            }
+        }
+        if(password == null || password == "")
+        {
+            warningp = "* Password is Required";
+            vf = true;
+        }
+        else
+        {
+            checklogin = true;
+        }
+    }
+
+    private void setTrue()
+    {
+        set = true;
+        StartTimer();
+    }
+
+    private void setFalse()
+    {
+        set = false;
+        aTimer.Enabled = false;
+        GC.Collect();
+    }
+
+    private void setDatabase()
+    {
+        db = database.testCon();
+        if(db == true)
+        {
+            dbstatus = "active";
+            databaseCSS = "font-style: oblique; font-size: 15px; color: #20A755;";
+            InvokeAsync(StateHasChanged);
+        }
+        else
+        {
+            dbstatus = "deactive";
+            databaseCSS = "font-style: oblique; font-size: 15px; color: red;";
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void StartTimer()
+    {
+        aTimer = new System.Timers.Timer(1000);
+        aTimer.Elapsed += CountDownTimer;
+        aTimer.Enabled = true;
+    }
+
+    private void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        if (counter > 0)
+        {
+            counter -= 1;
+        }
+        else
+        {
+            counter = 5;
+            setDatabase();
+        }
+        InvokeAsync(StateHasChanged);
+    }
+}

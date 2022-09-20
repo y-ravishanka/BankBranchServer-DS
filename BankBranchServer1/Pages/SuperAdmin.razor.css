@@ -1,0 +1,83 @@
+﻿
+.item_center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item_right {
+    display: flex;
+    justify-content: right;
+    align-items: end;
+}
+
+.table_style {
+    background-color: #212529;
+    color: white;
+}
+
+.button_custom {
+    display: flex;
+    width: 200px;
+    height: 35px;
+    font-size: 17px;
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-top: 2px solid #212529;
+}
+
+.none_button {
+    background-color: white;
+    border: none;
+    border-style: none;
+}
+
+.search_nav_button {
+    background-color: white;
+    width: 150px;
+    color: #212529;
+    border: none;
+    border-style: none;
+    border-radius: 4px;
+}
+
+.search_nav_container {
+    padding-left: 0.1px;
+    padding-right: 0.1px;
+    border: 0.5px solid gray;
+    border-radius: 4px;
+    width: 302.4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.search_button {
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-style: none;
+    border-radius: 4px;
+    width: 120px;
+}
+
+    .search_button:hover {
+        background-color: dimgray;
+    }
+
+.search_input {
+    width: 241px;
+    height: auto;
+}
+
+.search_container {
+    border: 1px solid #212529;
+    width: 600px;
+    border-radius: 4px;
+}
+
+.dhaodhw {
+    background-color: white;
+    color: #212529;
+    border: 1px solid #212529;
+}

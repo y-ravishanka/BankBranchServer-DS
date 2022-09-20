@@ -1,0 +1,119 @@
+﻿
+@inject Database database
+
+@*<div class="modal_settings">
+    <table class="table">
+        <thead>
+            <tr class="style_table">
+                <th>ID</th>
+                <th>Login Time</th>
+                <th>Logout Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ActivityLog log in list)
+            {
+                <tr>
+                    <td>@log.id</td>
+                    <td>@log.login</td>
+                    <td>@log.logout</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>*@
+<div class="modal_settings overflow-auto">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">Data of : @date</div>
+            <div class="card-body">
+                <div class="row"></div>
+                <div class="col-sm-6">
+                    <table>
+                        <tr>
+                            <td>Deposits</td>
+                            <td>: @depoi</td>
+                        </tr>
+                        <tr>
+                            <td>Withdraws</td>
+                            <td>: @withd</td>
+                        </tr>
+                        <tr>
+                            <td>New Accounts</td>
+                            <td>: @newacc</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-6">
+                    <table>
+                        <tr>
+                            <td>Deposits Amount</td>
+                            <td>: @damou</td>
+                        </tr>
+                        <tr>
+                            <td>Withdraws Amount</td>
+                            <td>: @wamou</td>
+                        </tr>
+                        <tr>
+                            <td>Balance</td>
+                            <td>: @blnc</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <br />
+        <h4>Data Log</h4>
+        <table class="table ">
+            <thead>
+                <tr class="style_table">
+                    <th>Deposits</th>
+                    <th>Withdraws</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(FullStatus status in log)
+                {
+                    <tr>
+                        <td>@status.deposits</td>
+                        <td>@status.withdraws</td>
+                        <td>@status.balance</td>
+                        <td><button class="btn btn-dark py-1 px-3 text-white" @onclick="@(e=>SetData(status))">View</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<FullStatus>? log { get; set; }
+    private string? date;
+    private int depoi;
+    private float damou;
+    private int withd;
+    private float wamou;
+    private float blnc;
+    private int newacc;
+
+    protected override void OnInitialized()
+    {
+        SetData(log[0]);
+    }
+
+    private void SetData(FullStatus stat)
+    {
+        date = stat.date;
+        depoi = stat.deposits;
+        damou = stat.damount;
+        withd = stat.withdraws;
+        wamou = stat.wamount;
+        blnc = stat.balance;
+        newacc = stat.newaccounts;
+        StateHasChanged();
+    }
+}
